@@ -1,0 +1,2 @@
+make
+./crystals < ../tests/t1.in
