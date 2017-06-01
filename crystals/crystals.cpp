@@ -8,8 +8,8 @@ char getField(int x, int y);
 void solveMirrors(int x, int y, int mirrorsLeft, int height, int width);
 int getCrystals(int height, int width);
 bool simulateLaser(int height, int width);
+void printSolution();
 
-vector<string> maze;
 struct Crystal {
     int x;
     int y;
@@ -18,6 +18,10 @@ struct Crystal {
 enum Direction {
     UP, DOWN, RIGHT, LEFT
 };
+
+vector<string> maze;
+vector<Crystal> crystals;
+
 const char MIRROR1 = '/',
         MIRROR2 = '\\',
         EMPTY = ' ',
@@ -38,34 +42,32 @@ int main() {
         maze.push_back(temp);
     }
 
-    int crystalCounter = getCrystals(height, width);
-
+    getCrystals(height, width);
     solveMirrors(0, 0, mirrors, height, width);
 
-    for (int i = 0; i < height; ++i) {
-        cout << maze[i] << endl;
-    }
-
-
-    return 0;
+    cout << "No solution found" << endl;
+    return 1;
 }
 
 void solveMirrors(int x, int y, int mirrorsLeft, int height, int width) {
 
     if (mirrorsLeft <= 0) {
-        simulateLaser(height, width);
+        if(simulateLaser(height, width)) {
+            printSolution();
+            exit(0);
+        }
     } else {
         for (int row = x; row < height; ++row) {
             for (int col = y; col < width; ++col) {
                 if (canPlace(col, row)) {
                     solveMirrors(x, y, mirrorsLeft - 1, height, width);
 
-                    maze[row, col] = MIRROR1;
+                    maze[row][col] = MIRROR1;
                     solveMirrors(x, y, mirrorsLeft - 1, height, width);
-                    maze[row, col] = MIRROR2;
+                    maze[row][col] = MIRROR2;
                     solveMirrors(x, y, mirrorsLeft - 1, height, width);
 
-                    maze[row, col] = EMPTY;
+                    maze[row][col] = EMPTY;
 
                 }
             }
@@ -84,6 +86,8 @@ int getCrystals(int height, int width) {
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
             if (maze[i][j] == CRYSTAL) {
+                Crystal crystal = {j, i, false};
+                crystals.push_back(crystal);
                 counter++;
             }
         }
@@ -96,6 +100,11 @@ bool simulateLaser(int height, int width) {
     int x = 0, y = 1;
 
     while (x < width  && y < height) {
+
+        if(x < 0 || y < 0 || getField(x, y) == BLOCK) {
+            return false;
+        }
+
         if (getField(x, y) == MIRROR1) {
             switch (direction) {
                 case UP:
@@ -136,6 +145,8 @@ bool simulateLaser(int height, int width) {
             }
         } else {
 
+
+
             // Normal way
             switch (direction) {
                 case UP:
@@ -154,9 +165,15 @@ bool simulateLaser(int height, int width) {
 
         }
     }
-
+    return true;
 }
 
 char getField(int x, int y) {
     return maze[y][x];
+}
+
+void printSolution() {
+    for (int i = 0; i < maze.size(); ++i) {
+        cout << maze[i] << endl;
+    }
 }
