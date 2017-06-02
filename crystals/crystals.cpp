@@ -4,11 +4,18 @@
 using namespace std;
 
 bool canPlace(int x, int y);
+
 char getField(int x, int y);
+
 void solveMirrors(int x, int y, int mirrorsLeft, int height, int width);
+
 int getCrystals(int height, int width);
+
 bool simulateLaser(int height, int width);
+
 void printSolution();
+
+void darkenCrystals();
 
 struct Crystal {
     int x;
@@ -52,7 +59,7 @@ int main() {
 void solveMirrors(int x, int y, int mirrorsLeft, int height, int width) {
 
     if (mirrorsLeft <= 0) {
-        if(simulateLaser(height, width)) {
+        if (simulateLaser(height, width)) {
             printSolution();
             exit(0);
         }
@@ -99,9 +106,9 @@ bool simulateLaser(int height, int width) {
     Direction direction = RIGHT;
     int x = 0, y = 1;
 
-    while (x < width  && y < height) {
+    while (x < width && y < height) {
 
-        if(x < 0 || y < 0 || getField(x, y) == BLOCK) {
+        if (x < 0 || y < 0 || getField(x, y) == BLOCK) {
             return false;
         }
 
@@ -145,7 +152,20 @@ bool simulateLaser(int height, int width) {
             }
         } else {
 
-
+            if (getField(x, y) == CRYSTAL) {
+                for (auto& c : crystals) {
+                    if(c.x == x && c.y == y) {
+                        c.light = true;
+                    }
+                }
+                bool allLight = true;
+                for (auto& c : crystals) {
+                    if(!c.light) {
+                        allLight = false;
+                    }
+                }
+                if (allLight) return true;
+            }
 
             // Normal way
             switch (direction) {
@@ -164,8 +184,11 @@ bool simulateLaser(int height, int width) {
             }
 
         }
+
     }
-    return true;
+    darkenCrystals();
+
+    return false;
 }
 
 char getField(int x, int y) {
@@ -175,5 +198,11 @@ char getField(int x, int y) {
 void printSolution() {
     for (int i = 0; i < maze.size(); ++i) {
         cout << maze[i] << endl;
+    }
+}
+
+void darkenCrystals() {
+    for (auto& c : crystals) {
+        c.light = false;
     }
 }
