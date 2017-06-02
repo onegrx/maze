@@ -109,6 +109,7 @@ bool simulateLaser(int height, int width) {
     while (x < width && y < height) {
 
         if (x < 0 || y < 0 || getField(x, y) == BLOCK) {
+            darkenCrystals();
             return false;
         }
 
@@ -124,11 +125,11 @@ bool simulateLaser(int height, int width) {
                     break;
                 case LEFT:
                     direction = DOWN;
-                    y--;
+                    y++;
                     break;
                 case RIGHT:
                     direction = UP;
-                    y++;
+                    y--;
                     break;
             }
         } else if (getField(x, y) == MIRROR2) {
@@ -143,11 +144,11 @@ bool simulateLaser(int height, int width) {
                     break;
                 case LEFT:
                     direction = UP;
-                    y++;
+                    y--;
                     break;
                 case RIGHT:
                     direction = DOWN;
-                    y--;
+                    y++;
                     break;
             }
         } else {
@@ -170,10 +171,10 @@ bool simulateLaser(int height, int width) {
             // Normal way
             switch (direction) {
                 case UP:
-                    y++;
+                    y--;
                     break;
                 case DOWN:
-                    y--;
+                    y++;
                     break;
                 case RIGHT:
                     x++;
