@@ -52,7 +52,7 @@ int main() {
     }
 
     getCrystals(height, width);
-    solveMirrors(0, 0, mirrors, height, width);
+    solveMirrors(0, 1, mirrors, height, width);
 
     cout << "No solution found" << endl;
     return 1;
