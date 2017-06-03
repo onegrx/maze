@@ -1,5 +1,6 @@
 #!/bin/bash
 mkdir -p temp_out
+make
 for file in ../tests/*.in; do
 	NR=`echo $file | grep -o [0-9]`
 	./crystals < $file > "temp_out/test$NR.out"
