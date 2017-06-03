@@ -13,7 +13,7 @@ int getCrystals(int height, int width);
 
 bool simulateLaser(int height, int width);
 
-void printSolution();
+void printSolution(int height, int width);
 
 void darkenCrystals();
 
@@ -28,6 +28,7 @@ enum Direction {
 
 vector<string> maze;
 vector<Crystal> crystals;
+int mirrorsNumber;
 
 const char MIRROR1 = '/',
         MIRROR2 = '\\',
@@ -40,6 +41,7 @@ int main() {
     int height, width, mirrors;
     cin >> height >> width;
     cin >> mirrors;
+    mirrorsNumber = mirrors;
 
     cin.ignore();
 
@@ -60,7 +62,7 @@ void solveMirrors(int x, int y, int mirrorsLeft, int height, int width) {
 
     if (mirrorsLeft <= 0) {
         if (simulateLaser(height, width)) {
-            printSolution();
+            printSolution(height, width);
             exit(0);
         }
     } else {
@@ -196,7 +198,9 @@ char getField(int x, int y) {
     return maze[y][x];
 }
 
-void printSolution() {
+void printSolution(int height, int width) {
+    cout << height << " " << width << endl;
+    cout << mirrorsNumber << endl;
     for (int i = 0; i < maze.size(); ++i) {
         cout << maze[i] << endl;
     }
