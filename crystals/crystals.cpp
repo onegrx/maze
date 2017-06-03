@@ -50,7 +50,7 @@ int main() {
     }
 
     getCrystals();
-    solveMirrors(0, 1, mirrors);
+    solveMirrors(0, 0, mirrors);
 
     cout << "No solution found" << endl;
     return 1;
